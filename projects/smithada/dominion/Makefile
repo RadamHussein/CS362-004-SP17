@@ -9,6 +9,9 @@ dominion.o: dominion.h dominion.c rngs.o
 playdom: dominion.o playdom.c
 	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)
 
+testShuffle: testShuffle.c dominion.o rngs.o
+	gcc -o testShuffle -g testShuffle.c dominion.o rngs.o $(CFLAGS)
+
 #testDrawCard: testDrawCard.c dominion.o rngs.o
 #	gcc -o testDrawCard -g  testDrawCard.c dominion.o rngs.o $(CFLAGS)
 
