@@ -60,7 +60,7 @@ int main () {
   ret = shuffle(0,&G);
 
   ///////Test3: Expected return value///////
-  printf("shuffle(): ")
+  printf("shuffle(): ");
   if (ret == 0){
     printf("PASS");
   }
