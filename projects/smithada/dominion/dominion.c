@@ -278,25 +278,27 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
       for (j = 0; j < 10; j++)           		//loop chosen cards
     	{
     	  if (kingdomCards[j] == i)
-    	    {
+    	  {
     	      //check if card is a 'Victory' Kingdom card
     	      if (kingdomCards[j] == great_hall || kingdomCards[j] == gardens)
-    		{
-    		  if (numPlayers == 2){ 
-    		    state->supplyCount[i] = 8; 
-    		  }
-    		  else{ state->supplyCount[i] = 12; }
-    		}
+    		    {
+        		  if (numPlayers == 2){ 
+        		    state->supplyCount[i] = 8; 
+        		  }
+    		      else{ 
+                state->supplyCount[i] = 12; 
+              }
+    		    }
     	      else
-    		{
-    		  state->supplyCount[i] = 10;
-    		}
+    		    {
+    		      state->supplyCount[i] = 10;
+    		    }
     	      break;
-    	    }
+    	  }
     	  else    //card is not in the set choosen for the game
-    	    {
-    	      state->supplyCount[i] = -1;
-    	    }
+    	  {
+    	     state->supplyCount[i] = -1;
+    	  }
     	}
     }
 
@@ -569,16 +571,17 @@ int isGameOver(struct gameState *state) {
   //if three supply pile are at 0, the game ends
   j = 0;
   for (i = 0; i < 25; i++)
-    {
+  {
       if (state->supplyCount[i] == 0)
-	{
-	  j++;
-	}
-    }
+	     {
+	       j++;
+	     }
+  }
+
   if ( j >= 3)
-    {
+  {
       return 1;
-    }
+  }
 
   return 0;
 }
@@ -1352,17 +1355,17 @@ int updateCoins(int player, struct gameState *state, int bonus)
   for (i = 0; i < state->handCount[player]; i++)
     {
       if (state->hand[player][i] == copper)
-	{
-	  state->coins += 1;
-	}
+    	{
+    	  state->coins += 1;
+    	}
       else if (state->hand[player][i] == silver)
-	{
-	  state->coins += 2;
-	}
+    	{
+    	  state->coins += 2;
+    	}
       else if (state->hand[player][i] == gold)
-	{
-	  state->coins += 3;
-	}	
+    	{
+    	  state->coins += 3;
+    	}	
     }	
 
   //add bonus
