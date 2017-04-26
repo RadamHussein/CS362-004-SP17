@@ -57,66 +57,6 @@ const char* getCardName(int cardType){
 	return "unknown_value";
 }
 
-void checkKingdomCardCount(int players, struct gameState *deck, int kingdomCards[10]){
-	int j;
-	int i;
-	int found = 0;
-	for (i = adventurer; i <= treasure_map; i++){
-		printf("Looking for %s....\n", getCardName(i));
-		for (j= 0; j < 10; j++){
-			if (kingdomCards[j] == i){
-				//check if card is a 'Victory' Kingdom card
-				found = 1;
-    	      if (kingdomCards[j] == great_hall || kingdomCards[j] == gardens)
-    		    {
-        		  if (players == 2){ 
-        		    //state->supplyCount[i] = 8; 
-        		    printf("initializeGame(): ");
-        		    comp(deck->supplyCount[i], 8);
-        		    printf(" %s count with 2 players\n", getCardName(kingdomCards[j]));
-        		    //printf(" %d count with 2 players\n", kingdomCards[j]);
-        		    break;
-        		  }
-    		      else
-    		      { 
-    		      	//state->supplyCount[i] = 12; 
-    		      	printf("initializeGame(): ");
-    		      	comp(deck->supplyCount[i], 12);
-    		      	printf(" %s or gardens count with > 2 players\n", getCardName(kingdomCards[j]));
-    		      	//printf(" %d count with > 2 players\n", kingdomCards[j]);
-    		      	break;
-    		      }
-    		    }
-    	      else
-    		    {
-    		      //state->supplyCount[i] = 10;
-    		      printf("initializeGame(): ");
-    		      comp(deck->supplyCount[i], 10);
-    		      printf(" %s in deck count\n", getCardName(kingdomCards[j]));
-    		      //printf(" %d in deck\n", kingdomCards[j]);
-    		      break;
-    		    }
-			}
-			/*
-			else    //card is not in the set choosen for the game
-    	  	{
-    	     	****There may be a bug in the initializeGame() function here!****
-    	  	}
-    	  	*/
-		}
-		if (found == 0){
-			printf("initializeGame(): ");
-    		comp(deck->supplyCount[i], -1);
-    		printf(" %s not in deck count\n", getCardName(kingdomCards[i]));
-    	}
-    	else{
-    		//card has been found. Reset found to false
-    		found = 0;
-    	}
-		
-	}
-}
-
 void verifyInitialDecks(int players, struct gameState *state){
 	int copperCount = 0;
 	int estateCount = 0;
@@ -142,18 +82,145 @@ void verifyInitialDecks(int players, struct gameState *state){
 	}
 }
 
+void verifyShuffle(struct gameState *G, int numPlayers){
+	int i;
+	int j;
+	int estateCount = 0;
+	int copperCount = 0;
 
-/*
-void checkTreasureCards(int playerCount, variable, value){
-	printf("initializeGame(): ");
-	comp(variable, value);
-	printf(" coppers with %d players\n", playerCount);
+	for (i = 0; i < numPlayers; i++){
+		for (j = 0; j < 3; j++){
+			if (G->deck[i][j] == estate){
+				estateCount++;
+			}
+		}
+		for (j = 3; j < 10; j++){
+			if (G->deck[i][j] == copper){
+				copperCount++;
+			}
+		}
+
+		if (copperCount == 7 || estateCount == 3){
+		printf("initializeGame(): FAIL shuffle player %d deck\n", i+1);
+		}
+		else{
+			printf("initializeGame(): PASS shuffle player %d deck\n", i+1);
+		}
+		estateCount = 0;
+		copperCount = 0;
+	}
 }
-*/
+
+void verifyPlayerHands(struct gameState *G, int numPlayers){
+	int i; 
+	int j;
+	int count = 0;
+
+	for (i = 0; i < numPlayers; i++){
+		for (j = 0; j < 5; j++){
+			if (G->hand[i][j] == estate || G->hand[i][j] == copper){
+				count++;
+			}
+		}
+		if (count == 5){
+			printf("initializeGame(): PASS player %d has 5 cards in hand\n", i+1);
+		}
+		else{
+			printf("initializeGame(): FAIL player %d has 5 cards in hand\n", i+1);
+		}
+		count = 0;
+	}
+}
+
+void verifyEmbargoTokens(struct gameState *G){
+	int i;
+	int count = 0;
+	for (i = 0; i <= treasure_map; i++)
+    {
+    	if (G->embargoTokens[i] == 0){
+    		count++;
+    	}
+    }
+    if (count == i){
+    	printf("initializeGame(): PASS setting embargoTokens\n");
+    }
+    else{
+    	printf("initializeGame(): FAIL setting embargoTokens\n");
+    }
+}
+
+void verifyFirstPlayersTurn(struct gameState *G){
+  if(G->outpostPlayed != 0){
+  	printf("initializeGame(): FAIL initialize first player's turn\n");
+  }
+  else if(G->phase != 0){
+  	printf("initializeGame(): FAIL initialize first player's turn\n");
+  }
+  else if(G->numActions != 1){
+  	printf("initializeGame(): FAIL initialize first player's turn\n");
+  }
+  else if(G->numBuys != 1){
+  	printf("initializeGame(): FAIL initialize first player's turn\n");
+  }
+  else if(G->playedCardCount != 0){
+  	printf("initializeGame(): FAIL initialize first player's turn\n");
+  }
+  else{
+  	printf("initializeGame(): PASS initialize first player's turn\n");
+  }
+}
+
+void verifyKingdomCardCount(struct gameState *G, int kingdomCards[], int numPlayers){
+	int i;
+	int j;
+	int fail = 0;
+
+	 for (i = adventurer; i <= treasure_map; i++){       	//loop all cards
+	      for (j = 0; j < 10; j++)           		//loop chosen cards
+	    	{
+	    	  if (kingdomCards[j] == i)
+	    	  {
+	    	      //check if card is a 'Victory' Kingdom card
+	    	      if (kingdomCards[j] == great_hall || kingdomCards[j] == gardens)
+	    		    {
+	        		  if (numPlayers == 2){ 
+	        		    if(G->supplyCount[i] != 8){
+	        		    	fail = 1;
+	        		    } 
+	        		  }
+	    		      else{ 
+	                		if(G->supplyCount[i] != 12){
+	                			fail = 1;
+	                		} 
+	              		}
+	    		    }
+	    	      else
+	    		    {
+	    		      if(G->supplyCount[i] != 10){
+	    		      	fail = 1;
+	    		      }
+	    		    }
+	    	      break;
+	    	  }
+	    	  else    //card is not in the set choosen for the game
+	    	  {
+	    	     if(G->supplyCount[i] != -1){
+	    	     	fail = 1;
+	    	     }	
+	    	  }
+	    	}
+	    }
+	    if (fail == 0){
+	    	printf("initializeGame(): PASS set number of kingdom cards\n");
+	    }
+	    else{
+	    	printf("initializeGame(): FAIL set number of kingdom cards\n");
+	    }
+}
 
 int main(){
-	int i;
 	struct gameState G;
+	struct gameState G2;
 	int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
 	           sea_hag, great_hall, smithy};
 	int players;
@@ -189,6 +256,8 @@ int main(){
 	///////Test3: ///////
 	k[6] = cutpurse;
 	players = 2;
+	memcpy(&G2, &G, sizeof(struct gameState));
+
 	while (players < 5){
 		ret = initializeGame(players, k, 10, &G);
 
@@ -229,19 +298,24 @@ int main(){
 			printf("initializeGame(): ");
 			comp(G.supplyCount[gold], 30);
 			printf(" gold with 2 players\n");
-/*
-			///Kingdom cards///
-			printf("\n");
-			printf("*******Checking kingdom cards with %d players\n", players);
-			printf("Kindom cards in deck: ");
-			for (i = 0; i < 10; i++){
-				printf("%s, ", getCardName(k[i]));
-			}
-			printf("\n");
-			checkKingdomCardCount(players, &G, k);
-*/
+
+			//verify set number of kingdom cards
+			verifyKingdomCardCount(&G, k, players);
+
 			//Loaded decks
 			verifyInitialDecks(players, &G);
+
+			//is deck shuffled
+			verifyShuffle(&G, players);
+
+			//do players have correct five cards in hand
+			verifyPlayerHands(&G, players);
+
+			//were embargoTokens set to 0
+			verifyEmbargoTokens(&G);
+
+			//verify initialize first player's turn
+			verifyFirstPlayersTurn(&G);
 		}
 		else if (players == 3){
 			printf("\n");
@@ -276,19 +350,24 @@ int main(){
 			printf("initializeGame(): ");
 			comp(G.supplyCount[gold], 30);
 			printf(" gold with 3 players\n");
-/*
-			///Kingdom cards///
-			printf("\n");
-			printf("*******Checking kingdom cards with %d players\n", players);
-			printf("Kindom cards in deck: ");
-			for (i = 0; i < 10; i++){
-				printf("%s, ", getCardName(k[i]));
-			}
-			printf("\n");
-			checkKingdomCardCount(players, &G, k);
-*/
+
+			//verify set number of kingdom cards
+			verifyKingdomCardCount(&G, k, players);
+
 			//Loaded decks
 			verifyInitialDecks(players, &G);
+
+			//is deck shuffled
+			verifyShuffle(&G, players);
+
+			//do players have correct five cards in hand
+			verifyPlayerHands(&G, players);
+
+			//were embargoTokens set to 0
+			verifyEmbargoTokens(&G);
+
+			//verify initialize first player's turn
+			verifyFirstPlayersTurn(&G);
 		}
 		else{
 			printf("\n");
@@ -323,21 +402,27 @@ int main(){
 			printf("initializeGame(): ");
 			comp(G.supplyCount[gold], 30);
 			printf(" gold with 3 players\n");
-/*
-			///Kingdom cards///
-			printf("\n");
-			printf("*******Checking kingdom cards with %d players\n", players);
-			printf("Kindom cards in deck: ");
-			for (i = 0; i < 10; i++){
-				printf("%s, ", getCardName(k[i]));
-			}
-			printf("\n");
-			checkKingdomCardCount(players, &G, k);
-*/
+
+			//verify set number of kingdom cards
+			verifyKingdomCardCount(&G, k, players);
+
 			//Loaded decks
 			verifyInitialDecks(players, &G);
+
+			//is deck shuffled
+			verifyShuffle(&G, players);
+
+			//do players have correct five cards in hand
+			verifyPlayerHands(&G, players);
+
+			//were embargoTokens set to 0
+			verifyEmbargoTokens(&G);
+
+			//verify initialize first player's turn
+			verifyFirstPlayersTurn(&G);
 		}
 		players++;
+		memcpy(&G, &G2, sizeof(struct gameState));
 	}
 
 

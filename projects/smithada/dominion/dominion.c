@@ -337,10 +337,10 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
       state->handCount[i] = 0;
       state->discardCount[i] = 0;
       //draw 5 cards
-      // for (j = 0; j < 5; j++)
-      //	{
-      //	  drawCard(i, state);
-      //	}
+      for (j = 0; j < 5; j++)
+      {
+      	  drawCard(i, state);
+      }
     }
   
   //set embargo tokens to 0 for all supply piles
