@@ -1,2 +1,156 @@
 Results for runnig assignment 3 unit tests
+unittest1.c: shuffle()
+shuffle(): PASS when passing invalid deckCount
+shuffle(): PASS when comparing un-shuffled decks
+shuffle(): PASS return value check
+shuffle(): PASS when comparing shuffled decks (decks are different)
+shuffle(): PASS when comparing original and shuffled decks
+File 'dominion.c'
+Lines executed:3.72% of 565
+Creating 'dominion.c.gcov'
+
 unittest2.c: initializeGame()
+initializeGame(): PASS when invalid number of players....not enough players
+initializeGame(): PASS when invalid number of players....too many players
+initializeGame(): PASS when passing array with duplicate kingdom cards
+initializeGame(): PASS return value with 2 players
+
+********** numPlayers: 2 **********
+initializeGame(): PASS curse cards with 2 players
+initializeGame(): PASS estate cards with 2 players
+initializeGame(): PASS duchy cards with 2 players
+initializeGame(): PASS province cards with 2 players
+initializeGame(): PASS coppers with 2 players
+initializeGame(): PASS silver with 2 players
+initializeGame(): PASS gold with 2 players
+initializeGame(): FAIL set number of kingdom cards
+initializeGame(): PASS initial player deck configuration
+initializeGame(): PASS shuffle player 1 deck
+initializeGame(): PASS shuffle player 2 deck
+initializeGame(): PASS player 1 has 5 cards in hand
+initializeGame(): PASS player 2 has 5 cards in hand
+initializeGame(): PASS setting embargoTokens
+initializeGame(): PASS initialize first player's turn
+initializeGame(): PASS return value with 3 players
+
+********** numPlayers: 3 **********
+initializeGame(): PASS curse cards with 3 players
+initializeGame(): PASS estate cards with 3 players
+initializeGame(): PASS duchy cards with 3 players
+initializeGame(): PASS province cards with 3 players
+initializeGame(): PASS coppers with 3 players
+initializeGame(): PASS silver with 3 players
+initializeGame(): PASS gold with 3 players
+initializeGame(): FAIL set number of kingdom cards
+initializeGame(): PASS initial player deck configuration
+initializeGame(): PASS shuffle player 1 deck
+initializeGame(): PASS shuffle player 2 deck
+initializeGame(): PASS shuffle player 3 deck
+initializeGame(): PASS player 1 has 5 cards in hand
+initializeGame(): PASS player 2 has 5 cards in hand
+initializeGame(): PASS player 3 has 5 cards in hand
+initializeGame(): PASS setting embargoTokens
+initializeGame(): PASS initialize first player's turn
+initializeGame(): PASS return value with 4 players
+
+********** numPlayers: 4 **********
+initializeGame(): PASS curse cards with 4 players
+initializeGame(): PASS estate cards with 4 players
+initializeGame(): PASS duchy cards with 4 players
+initializeGame(): PASS province cards with 4 players
+initializeGame(): PASS coppers with 3 players
+initializeGame(): PASS silver with 3 players
+initializeGame(): PASS gold with 3 players
+initializeGame(): FAIL set number of kingdom cards
+initializeGame(): PASS initial player deck configuration
+initializeGame(): PASS shuffle player 1 deck
+initializeGame(): PASS shuffle player 2 deck
+initializeGame(): PASS shuffle player 3 deck
+initializeGame(): PASS shuffle player 4 deck
+initializeGame(): PASS player 1 has 5 cards in hand
+initializeGame(): PASS player 2 has 5 cards in hand
+initializeGame(): PASS player 3 has 5 cards in hand
+initializeGame(): PASS player 4 has 5 cards in hand
+initializeGame(): PASS setting embargoTokens
+initializeGame(): PASS initialize first player's turn
+File 'dominion.c'
+Lines executed:17.88% of 565
+Creating 'dominion.c.gcov'
+
+unittest3.c: isGameOver()
+isGameOver(): PASS depleted province cards
+isGameOver(): PASS 3 supply piles depleted
+isGameOver(): PASS 3 supply piles depleted
+isGameOver(): PASS less than 3 supply piles depleted
+isGameOver(): PASS less than 3 supply piles depleted
+isGameOver(): PASS less than 3 supply piles depleted
+File 'dominion.c'
+Lines executed:19.65% of 565
+Creating 'dominion.c.gcov'
+
+unittest4.c: gainCard()
+gainCard(): PASS passing card not in game
+gainCard(): PASS passing card not in game
+gainCard(): PASS passing card not in game
+gainCard(): PASS passing card not in game
+gainCard(): PASS passing card not in game
+gainCard(): PASS passing card not in game
+gainCard(): PASS passing card not in game
+gainCard(): PASS passing card not in game
+gainCard(): PASS passing card not in game
+gainCard(): PASS passing card not in game
+gainCard(): PASS passing valid game card to discard
+gainCard(): PASS passing valid game card to deck
+gainCard(): PASS passing valid game card to hand
+File 'dominion.c'
+Lines executed:22.30% of 565
+Creating 'dominion.c.gcov'
+
+cardtest1.c: adventurerFunction()
+adventurerFunction(): FAIL drawing treasure from deck
+adventurerFunction(): TEST FAILED
+File 'dominion.c'
+Lines executed:26.73% of 565
+Creating 'dominion.c.gcov'
+
+cardtest2.c: smithyFunction()
+
+Playing smithy from hand position 1...
+smithyFunction(): FAIL correctly gaining 3 cards and removing smithy from hand
+
+Playing smithy from hand position 2...
+smithyFunction(): FAIL correctly gaining 3 cards and removing smithy from hand
+
+Playing smithy from hand position 3...
+smithyFunction(): FAIL correctly gaining 3 cards and removing smithy from hand
+
+Playing smithy from hand position 4...
+smithyFunction(): FAIL correctly gaining 3 cards and removing smithy from hand
+
+Playing smithy from hand position 5...
+smithyFunction(): FAIL correctly gaining 3 cards and removing smithy from hand
+File 'dominion.c'
+Lines executed:29.56% of 565
+Creating 'dominion.c.gcov'
+
+cardtest3.c: mineFunction()
+mineFunction(): PASS choice 1 not a valid card
+mineFunction(): PASS choice 1 not a valid card
+mineFunction(): PASS choice 2 not a valid card
+mineFunction(): PASS choice 2 not a valid card
+mineFunction(): FAIL value of choice1 + 3 > choice2
+mineFunction(): FAIL value of choice1 + 3 < choice2
+mineFunction(): PASS trashing card from hand and receiving selected treasure card
+File 'dominion.c'
+Lines executed:32.92% of 565
+Creating 'dominion.c.gcov'
+
+cardtest4.c: treasuremapFunction()
+treasuremapFunction(): PASS hand with only 1 treasure map
+treasuremapFunction(): PASS removing single treasure_map from hand
+treasuremapFunction(): PASS hand with 2 treasure maps
+treasuremapFunction(): PASS gold added to deck
+File 'dominion.c'
+Lines executed:35.22% of 565
+Creating 'dominion.c.gcov'
+
