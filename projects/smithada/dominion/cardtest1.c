@@ -72,9 +72,6 @@ int main(){
 		printf("adventurerFunction(): FAILED to initialize game\n");
 	}
 
-	printf("////////////////////Initial player deck////////////////////\n");
-	printDeck(0, &G);
-
 	G.deck[0][0] = smithy;
 	G.deck[0][1] = estate;
 	G.deck[0][2] = silver;
@@ -87,13 +84,7 @@ int main(){
 
 	memcpy (&G2, &G, sizeof(struct gameState));
 
-	printf("////////////////////Added cards to deck////////////////////\n");
-	printDeck(0, &G);
-
 	adventurerFunction(0, &G, drawntreasure);
-
-	printf("////////////////////After call to adventurer////////////////////\n");
-	printDeck(0, &G);
 
 	for (i = 0; i < 9; i++){
 		if (G.deck[0][i] != G2.deck[0][i]){
@@ -103,7 +94,7 @@ int main(){
 
 	if(drawntreasure < 2){
 		printf("adventurerFunction(): FAIL drawing treasure from deck\n");
-		printf("**************adventurerFunction(): TEST FAILED*****************\n");
+		printf("adventurerFunction(): TEST FAILED\n");
 	}
 	else{
 		printf("adventurerFunction(): PASS drawing treasure from deck\n");

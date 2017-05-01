@@ -4,7 +4,30 @@
 #include <string.h>
 #include <stdlib.h>
 
-int compare(const int* a, const int* b);
+int checkTheDecks(struct gameState *G){
+  int copperCount = 0;
+  int estateCount = 0;
+  int wrongCard = 0;
+  int i;
+
+  for (i = 0; i < 10; i++){
+    if (G->deck[0][i] == copper){
+      copperCount++;
+    }
+    else if (G->deck[0][i] == estate){
+      estateCount++;
+    }
+    else{
+      wrongCard++;
+    }
+  }
+  if (copperCount == 7 && estateCount == 3 && wrongCard == 0){
+    return 0;
+  }
+  else{
+    return -1;
+  }
+}
 
 int main () {
   struct gameState G;
@@ -79,17 +102,17 @@ int main () {
   }
   printf(" when comparing shuffled decks (decks are different)\n");
 
-  qsort ((G.deck[0]), G.deckCount[0], sizeof(int), compare);
-  qsort ((G2.deck[0]), G2.deckCount[0], sizeof(int), compare);
-
   ///////Test5: Decks are same after shuffle and sort///////
+  i = checkTheDecks(&G);
+  j = checkTheDecks(&G2);
   printf("shuffle(): ");
-  if (memcmp(&G, &G2, sizeof(struct gameState)) == 0){
+  if (i == 0 && j == 0){
     printf("PASS");
   }
   else{
     printf("FAIL");
   }
-  printf(" when comparing shuffled and sorted decks\n");
+  printf(" when comparing original and shuffled decks\n");
 
+  return 0;
 }
