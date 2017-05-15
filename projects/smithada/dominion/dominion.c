@@ -26,7 +26,7 @@ void adventurerFunction(int currentPlayer, struct gameState *state, int drawntre
       z++;
     }
   }
-  while(z >=0){
+  while(z-1>=0){
     state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
     z=z-1;
   }
@@ -35,6 +35,7 @@ void adventurerFunction(int currentPlayer, struct gameState *state, int drawntre
 void smithyFunction(int currentPlayer, int handPos, struct gameState *state){
   int i;
 
+  //Should be i < 3 . remove = from loop to pass random tests
   for (i = 0; i <= 3; i++)
   {
     drawCard(currentPlayer, state);
@@ -165,7 +166,7 @@ int treasuremapFunction(int currentPlayer, struct gameState *state, int handPos)
     //return success
     return 1;
   }
-      
+
       //no second treasure_map found in hand
       return -1;
 }
@@ -205,11 +206,11 @@ int* kingdomCards(int k1, int k2, int k3, int k4, int k5, int k6, int k7,
 }
 
 int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
-		   struct gameState *state) {
+       struct gameState *state) {
 
   int i;
   int j;
-  int it;			
+  int it;     
   //set up random number generator
   SelectStream(1);
   PutSeed((long)randomSeed);
@@ -228,10 +229,10 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
     {
       for (j = 0; j < 10; j++)
         {
-	  if (j != i && kingdomCards[j] == kingdomCards[i])
-	    {
-	      return -1;
-	    }
+    if (j != i && kingdomCards[j] == kingdomCards[i])
+      {
+        return -1;
+      }
         }
     }
 
@@ -273,33 +274,32 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
   state->supplyCount[gold] = 30;
 
   //set number of Kingdom cards
-  for (i = adventurer; i <= treasure_map; i++)       	//loop all cards
+  for (i = adventurer; i <= treasure_map; i++)        //loop all cards
     {
-      for (j = 0; j < 10; j++)           		//loop chosen cards
-    	{
-    	  if (kingdomCards[j] == i)
-    	  {
-    	      //check if card is a 'Victory' Kingdom card
-    	      if (kingdomCards[j] == great_hall || kingdomCards[j] == gardens)
-    		    {
-        		  if (numPlayers == 2){ 
-        		    state->supplyCount[i] = 8; 
-        		  }
-    		      else{ 
-                state->supplyCount[i] = 12; 
-              }
-    		    }
-    	      else
-    		    {
-    		      state->supplyCount[i] = 10;
-    		    }
-    	      break;
-    	  }
-    	  else    //card is not in the set choosen for the game
-    	  {
-    	     state->supplyCount[i] = -1;
-    	  }
-    	}
+      for (j = 0; j < 10; j++)              //loop chosen cards
+  {
+    if (kingdomCards[j] == i)
+      {
+        //check if card is a 'Victory' Kingdom card
+        if (kingdomCards[j] == great_hall || kingdomCards[j] == gardens)
+    {
+      if (numPlayers == 2){ 
+        state->supplyCount[i] = 8; 
+      }
+      else{ state->supplyCount[i] = 12; }
+    }
+        else
+    {
+      state->supplyCount[i] = 10;
+    }
+        break;
+      }
+    else    //card is not in the set choosen for the game
+      {
+        state->supplyCount[i] = -1;
+      }
+  }
+
     }
 
   ////////////////////////
@@ -310,24 +310,24 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
     {
       state->deckCount[i] = 0;
       for (j = 0; j < 3; j++)
-    	{
-    	  state->deck[i][j] = estate;
-    	  state->deckCount[i]++;
-    	}
+  {
+    state->deck[i][j] = estate;
+    state->deckCount[i]++;
+  }
       for (j = 3; j < 10; j++)
-    	{
-    	  state->deck[i][j] = copper;
-    	  state->deckCount[i]++;		
-    	}
+  {
+    state->deck[i][j] = copper;
+    state->deckCount[i]++;    
+  }
     }
 
   //shuffle player decks
   for (i = 0; i < numPlayers; i++)
     {
       if ( shuffle(i, state) < 0 )
-	{
-	  return -1;
-	}
+  {
+    return -1;
+  }
     }
 
   //draw player hands
@@ -337,10 +337,10 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
       state->handCount[i] = 0;
       state->discardCount[i] = 0;
       //draw 5 cards
-      for (j = 0; j < 5; j++)
-      {
-      	  drawCard(i, state);
-      }
+      // for (j = 0; j < 5; j++)
+      //  {
+      //    drawCard(i, state);
+      //  }
     }
   
   //set embargo tokens to 0 for all supply piles
