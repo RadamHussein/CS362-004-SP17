@@ -1,0 +1,179 @@
+Bug Report
+
+1. playAdventurer(): 001
+
+  - Bug: no z iterator in else Condition
+
+  if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+    drawntreasure++;
+  else{
+    temphand[z]=cardDrawn;
+    state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+    z++;  /*****Add this line to fix the bug*****/
+  }
+
+  - This bug results in the playAdventurer() function never discarding any of the cards that are
+  drawn from the deck. This behavior essentially allows the player to iterate through their deck,
+  looking for treasure, while also keeping all their cards in the deck and in the same order. This
+  is not the correct function of the adventurer card.
+
+  - This bug can be observed by checking the discard count with any input or
+  configuration of the gameState struct.
+
+  EX:
+
+  //Check for deck and discard count when we know there were two or more treasure cards already in the deck
+  if(twoTreasureCardsInDeck == 1){
+    if (G.deckCount[currentPlayer] == foundTreasureIndices[1]){
+      deckPass++;
+    }
+    else{
+      deckFail++;
+    }
+
+    if (G.discardCount[currentPlayer] == (originalDiscardCount + (originalDeckCount - foundTreasureIndices[1] - 2))){
+      discardPass++;
+    }
+    else{
+      discardFail++;
+    }
+  }
+
+  -Estimated severity: MEDIUM. Program will not crash, however the adventurer card will not work
+  correctly.
+  -Estimated priority: HIGH.
+
+2. playSmithy(): 002
+
+  - Bug: For loop runs 1 iteration too many.
+
+    //+3 Cards
+    /***** i <= 3 should be i < 3 *****/
+   for (i = 0; i <= 3; i++)
+   {
+     drawCard(currentPlayer, state);
+   }
+
+   - This bug can be observed with any and all inputs and configurations of the gameState struct
+   when calling playSmithy().
+
+   - This bug can be observed by checking the deckCount and handCount values. The deckCount should
+   decrease by 3 after the call to playAdventurer(). The handCount value should increase by 2.
+
+   EX:
+
+   if (G.deckCount[currentPlayer] == (originalDeckCount - 3) && G.handCount[currentPlayer] == (originalHandCount + 2)){
+   printf("smithyFunction(): PASS correctly gaining 3 cards and removing smithy from hand\n");
+   }
+   else{
+     printf("smithyFunction(): FAIL correctly gaining 3 cards and removing smithy from hand\n");
+   }
+
+   - Estimated severity: MEDIUM. Program will not crash and playSmithy() will return results which will
+   look relatively correct if not inspected closely. However, this bug does cause the smithy card to
+   function incorrctly.
+   -Estimated priority: HIGH.
+
+3. playTreasureMap(): 003
+
+  - Bug: playTreasureMap() does not handle discarding a single treasure map card. The dominion
+  game spec allows for the treasure map card to function in two ways. The main function of the
+  card is to discard 2 treasure map cards from the hand and gain 4 gold cards to be added to the
+  deck. This is what the playTreasureMap() function is designed to do. However, the other function
+  of treasure map that the game allows for, is to simply discard a single treasure map card from
+  your hand if you only have one treasure map card. This implementation of the treasure map card
+  does not allow for this second type of behavior.
+
+    - This bug can be observed by simply looking at the code and following the branches. It can also
+    be observed by passing in a gameState where a hand has been initialized to contain only one
+    treasure map card in the hand, then checking the return value and hand after the call to
+    playTreasureMap().
+
+    EX: code below checks the return value. This currently is coded to allow the test to pass
+    because it is functioning as I believe it was intended to function by the person who wrote
+    this game's code, but I do not believe it that there was an omission made in the design of
+    this card.
+
+    //only 1 treasure card in hand. Should only return -1
+    if (treasureCount == 1){
+      if (ret == -1){
+        printf("treasuremapFunction(): PASS hand with only 1 treasure map\n");
+        passCount++;
+        oneCardPass++;
+      }
+      else{
+        printf("treasuremapFunction(): FAIL hand with only 1 treasure map\n");
+        failCount++;
+        oneCardFail++;
+      }
+    }
+
+    - Estimated severity: LOW. Program will not crash and this card functions as it was originally
+    intended/designed.
+    - Estimated priority: LOW.
+
+4. playTreasureMap(): 004
+
+  - Bug: If condition in for loop causes assignment instead of comparison.
+
+  /*****Bug: state->hand[currentPlayer][i] == treasure_map *****/
+  if ((state->hand[currentPlayer][i] = treasure_map) && i != handPos)
+    {
+      index = i;
+      break;
+    }
+
+  - This code assigns treasure map cards to incorrect hand positions as well as causing
+  the loop to iterate an unpredictable number of times. This ultimately results in handCount, deckCount,
+  and the player's deck and hand being incorrect after the playTreasureMap() function returns.
+
+  - This bug can be observed by placing two treasure map cards at specified positions in the hand.
+  After the call to playTreasureMap(), in addition to checking the expected return value, also
+  check the for the treasure map cards in the previous hand positions and check the top of the
+  deck for the 4 gold cards. Also checking the handCount and deckCount will inform you of the issue
+  also.
+
+  EX:
+
+  //more than 1 treasure card in hand.
+  else{
+    for (i = 0; i < G.handCount[currentPlayer]; i++){
+      if (G.hand[currentPlayer][i] == treasure_map){
+        foundTreasureMap++;
+      }
+    }
+
+    //check that 2 treasure cards were removed from hand
+    if (foundTreasureMap == treasureCount - 2){
+      printf("playTreasureMap(): PASS removing 2 treasure maps from hand\n");
+      passCount++;
+      twoCardPass++;
+    }
+    else{
+      printf("playTreasureMap(): FAIL removing 2 treasure maps from hand\n");
+      failCount++;
+      twoCardFail++;
+    }
+
+    for (i = 0; i < G.deckCount[currentPlayer]+4; i++){
+      if (G.deck[currentPlayer][i] == gold){
+        goldCount++;
+      }
+    }
+
+    //check that 4 gold cards were added to deck
+    if (goldCount == 4){
+      printf("playTreasureMap(): PASS adding 4 gold to deck\n");
+      passCount++;
+      addingGoldPass++;
+    }
+    else{
+      printf("playTreasureMap() FAIL adding 4 gold to deck\n");
+      failCount++;
+      addingGoldFail++;
+    }
+  }
+
+  - Estimated severity: HIGH. Card does not function properly. Assigning or removing values to and from
+  random and unpredictable memory locations could cause a crash.
+  - Estimated Priority: HIGH.
