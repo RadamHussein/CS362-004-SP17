@@ -110,7 +110,7 @@ public class UrlValidatorTest extends TestCase {
          
          if (printStatus) {
             if (printIndex) {
-               //System.out.print(testPartsIndextoString());
+               System.out.print(testPartsIndextoString());
             } else {
                if (result == expected) {
                   System.out.print('.');
